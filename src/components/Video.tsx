@@ -3,60 +3,40 @@ import { CaretRight, DiscordLogo, FileArrowDown, Lightning } from "phosphor-reac
 import { gql, useQuery } from "@apollo/client";
 
 import '@vime/core/themes/default.css';
+import { GetLessonBySlugResponse, IVideoProps } from "./@types/types";
 
 const GET_LESSON_BY_SLUG_QUERY = gql`
-  query GetLessonBySlug($slug: String!) {
-    lesson(slug: $slug) {
-      videoId
-      description
-      title
-      teacher {
-        name
-        avatar
-        bio
-      }
+  query GetLessonBySlug ($slug: String) {
+  lesson(where: {slug: $slug}) {
+    title
+    videoId
+    description
+    teacher {
+      bio
+      avatarURL
+      name
     }
-  }`;
-
-interface IVideoProps {
-  lessonSlug: string;
+  }
 }
-
-interface GetLessonBySlugResponse {
-  lesson: {
-    videoId: string;
-    description: string;
-    title: string;
-    teacher: {
-      name: string;
-      avatar: string;
-      bio: string;
-    };
-  };
-}
-
+  `;
+  
 export function Video(props: IVideoProps) {
-  const { data, loading, error } = useQuery<GetLessonBySlugResponse>(GET_LESSON_BY_SLUG_QUERY, {
+  const { data } = useQuery<GetLessonBySlugResponse>(GET_LESSON_BY_SLUG_QUERY, {
     variables: {
       slug: props.lessonSlug
     }
   })
 
   if(!data) {
-    return (
-      <div>Loading...</div>
-
-    )
+    return <div>Loading...</div>;
   }
 
-
-  console.log(data)
   return (
     <div className="flex-1">
       <div className="bg-black flex justify-center">
         <div className="h-full w-full max-w-[1100px] max-h-[60vh] aspect-video">
           <Player>
-            <Youtube videoId={data.lesson.videoId}/>
+            <Youtube videoId="RmcQ5NxB5Gs"/>
             <DefaultUi />
           </Player>
         </div>
@@ -74,7 +54,7 @@ export function Video(props: IVideoProps) {
             </p>
 
             <div className="flex items-center mt-6 gap-4">
-              <img src={data.lesson.teacher.avatar} alt={data.lesson.teacher.name}
+              <img src={data.lesson.teacher.avatarURL} alt={data.lesson.teacher.name}
                 className="rounded-full w-16 h-16 border-2 border-blue-500"
               />
 
