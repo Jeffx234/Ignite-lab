@@ -1,22 +1,14 @@
-import { gql, useMutation } from "@apollo/client";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-const CREATE_SUBSCRIPTION_MUTATION = gql`
-  mutation CreateSubscriber ($name: String!, $email: String!) {
-  createSubscriber(data: {name: $name, email: $email}) {
-    id
-  }
-}
-`;
+import { Logo } from "../components/Logo";
+import { useCreateSubscriberMutation } from "../graphql/generated";
 
 export function Subscribe() {
   const navigate = useNavigate();
-
   const [ email, setEmail ] = useState("");
   const [ name, setName ] = useState("");
 
-  const [createSubscriber, { loading }] = useMutation(CREATE_SUBSCRIPTION_MUTATION);
+  const [createSubscriber, { loading }] = useCreateSubscriberMutation();
 
   async function handleSubscriber(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -33,10 +25,10 @@ export function Subscribe() {
   }
 
   return (
-    <div className="min-h-screen bg-blur bg-cover bg-no-repeat flex flex-col items-center">
-      <div className="w-full max-w-[1100px] flex items-center justify-between mt-20 mx-auto">
-        <div className="max-w-[640px]">
-          Logo
+    <div className="min-h-screen bg-blur bg-cover bg-no-repeat flex flex-col items-center ">
+      <div className="w-full max-w-[1100px]  mt-20 mx-auto md:flex md:items-center md:justify-between ">
+        <div className=" flex items-center flex-col text-center max-w-[700px] md:text-left md:block p-10">
+          <Logo />
 
           <h1 className="mt-8 text-[2.5rem] leading-tight">
             Construa uma <strong className="text-blue-500"> aplicacao completa </strong> do zero, com  <strong className="text-blue-500"> ReactJS </strong>
